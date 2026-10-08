@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: ["main", "master"]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install gateway dependencies
+        run: pip install -r gateway/app/requirements.txt pytest
+
+      - name: Run tests
+        run: pytest -q
+
+      - name: Build Auth image
+        run: docker build -t fastapi-auth ./services/auth_service
+
+      - name: Build User image
+        run: docker build -t fastapi-user ./services/user_service
+
+      - name: Build ETL image
+        run: docker build -t fastapi-etl ./services/etl_service
+
+      - name: Build Gateway image
+        run: docker build -t fastapi-gateway ./gateway

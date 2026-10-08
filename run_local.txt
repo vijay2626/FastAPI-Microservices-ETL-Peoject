@@ -1,0 +1,16 @@
+LOCAL DEVELOPMENT
+
+Create a virtual environment:
+    python -m venv .venv
+
+Activate on Windows:
+    .venv\Scripts\activate
+
+Install gateway test dependencies:
+    pip install -r gateway/app/requirements.txt pytest
+
+Run tests:
+    pytest -q
+
+For the full stack, use:
+    docker compose up --build
